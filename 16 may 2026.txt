@@ -1,0 +1,51 @@
+CREATE DATABASE CollegeDB;
+
+USE CollegeDB;
+
+CREATE TABLE cse (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    year INT,
+    cgpa DECIMAL(3,2)
+);
+
+CREATE TABLE eee (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    year INT,
+    cgpa DECIMAL(3,2)
+);
+
+CREATE TABLE mech (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    year INT,
+    cgpa DECIMAL(3,2)
+);
+
+INSERT INTO cse VALUES
+(101, 'Rahul', 1, 8.5),
+(102, 'Sneha', 2, 9.1),
+(103, 'Amit', 3, 7.8),
+(104, 'Priya', 4, 8.9),
+(105, 'Karan', 2, 8.0);
+
+INSERT INTO eee VALUES
+(201, 'Arjun', 1, 7.5),
+(202, 'Neha', 2, 8.3),
+(203, 'Vikas', 3, 7.9),
+(204, 'Pooja', 4, 9.0),
+(205, 'Rohit', 2, 8.1);
+
+INSERT INTO mech VALUES
+(301, 'Deepak', 1, 7.2),
+(302, 'Anjali', 2, 8.4),
+(303, 'Manoj', 3, 7.7),
+(304, 'Kriti', 4, 8.8),
+(305, 'Suresh', 2, 7.9);
+
+SHOW TABLES;
+
+SELECT * FROM cse;
+SELECT * FROM eee;
+SELECT * FROM mech;
