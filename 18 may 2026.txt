@@ -1,0 +1,103 @@
+--------CREATE INSERT ALTER---------
+
+
+
+SHOW DATABASES;
+CREATE DATABASE university_portal;
+USE university_portal;
+CREATE TABLE student_records (
+    student_id INT PRIMARY KEY,
+    student_name VARCHAR(50),
+    marks INT,
+    department VARCHAR(30),
+    country VARCHAR(30)
+);
+INSERT INTO student_records VALUES
+(101, 'Aarav', 88, 'ComputerScience', 'India'),
+(102, 'Meera', 91, 'Electronics', 'Nepal'),
+(103, 'Kabir', 79, 'Mechanical', 'Bangladesh');
+SHOW TABLES FROM university_portal;
+SELECT * FROM student_records;
+DESC student_records;
+ALTER TABLE student_records
+ADD (
+    student_phone BIGINT,
+    parent_phone BIGINT
+);
+INSERT INTO student_records
+VALUES (106, 'Daniel', 95, 'ArtificialIntelligence', 'SriLanka', NULL, NULL);
+ALTER TABLE student_records
+DROP COLUMN parent_phone;
+ALTER TABLE student_records
+ADD (
+    student_location VARCHAR(30) DEFAULT 'INDIA'
+);
+ALTER TABLE student_records
+RENAME COLUMN student_location TO student_region;
+DESC student_records;
+SELECT * FROM student_records;
+
+
+
+
+
+
+
+--------DATE AND TIME--------
+
+
+
+
+CREATE DATABASE employee_management;
+USE employee_management;
+CREATE TABLE Worker(
+WORKER_ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+FIRST_NAME VARCHAR(25),
+LAST_NAME VARCHAR(25),
+SALARY INT,
+JOINING_DATE DATETIME,
+DEPARTMENT VARCHAR(25)
+);
+INSERT INTO Worker
+(WORKER_ID,FIRST_NAME,LAST_NAME,SALARY,JOINING_DATE,DEPARTMENT)
+VALUES
+(1,'Monika','Arora',100000,'2014-02-20 09:00:00','HR'),
+(2,'Niharika','Verma',80000,'2014-06-11 09:00:00','Admin'),
+(3,'Vishal','Singhal',300000,'2014-02-20 09:00:00','HR'),
+(4,'Amitabh','Singh',500000,'2014-02-20 09:00:00','Admin'),
+(5,'Vivek','Bhati',500000,'2014-06-11 09:00:00','Admin'),
+(6,'Vipul','Diwan',200000,'2014-06-11 09:00:00','Account'),
+(7,'Satish','Kumar',75000,'2014-01-20 09:00:00','Account'),
+(8,'Geetika','Chauhan',90000,'2014-04-11 09:00:00','Admin');
+SELECT * FROM Worker;
+UPDATE Worker
+SET FIRST_NAME='Jayanth',
+LAST_NAME='V'
+WHERE WORKER_ID=1;
+UPDATE Worker
+SET SALARY=SALARY+5000;
+DELETE FROM Worker
+WHERE WORKER_ID=8;
+SELECT * FROM Worker;
+select * from worker;
+UPDATE worker SET First_name='Jayanth',Last_name='V' WHERE worker_id=1;
+UPDATE worker SET salary = salary+5000; 
+DELETE FROM worker WHERE worker_id=8;
+
+
+
+
+--------TRANSACTION---------
+
+
+
+
+CREATE TABLE ECE( id int);
+START TRANSACTION;
+INSERT INTO ece values(1);
+SAVEPOINT point_1;
+INSERT INTO ece values(2);
+SAVEPOINT point_2;
+INSERT INTO ece VALUES (3);
+SELECT * FROM ece;
+ROLLBACK TO point_2;
