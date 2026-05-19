@@ -1,0 +1,193 @@
+-------- use of AND,OR,BETWEEN,NOT IN---------
+
+
+
+
+CREATE DATABASE vitcampus;
+USE vitcampus;
+CREATE TABLE worker (
+    worker_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    department VARCHAR(50),
+    salary INT
+);
+INSERT INTO worker (worker_id, first_name, last_name, department, salary) VALUES
+(1, 'Amit', 'Sharma', 'admin', 120000),
+(2, 'Priya', 'Verma', 'hr', 90000),
+(3, 'Rahul', 'Mehta', 'it', 250000),
+(4, 'Sneha', 'Patel', 'finance', 300000),
+(5, 'Vikas', 'Rao', 'admin', 150000),
+(6, 'Neha', 'Singh', 'hr', 110000),
+(7, 'Karan', 'Joshi', 'it', 500000),
+(8, 'Anjali', 'Kapoor', 'marketing', 100000);
+SHOW TABLES FROM vitcampus;
+
+SELECT * FROM worker;
+
+------- Workers from admin department OR salary >= 100000-----
+SELECT first_name, department, salary
+FROM worker
+WHERE department = 'admin'
+   OR salary >= 100000;
+
+
+SELECT * FROM worker;
+SELECT worker_id, first_name, department, salary
+FROM worker
+WHERE worker_id NOT IN (1, 6, 7);
+SELECT *
+FROM worker
+WHERE salary NOT BETWEEN 110000 AND 300000;
+-- excluding HR and Admin departments
+SELECT *
+FROM worker
+WHERE salary BETWEEN 100000 AND 500000
+  AND department NOT IN ('hr', 'admin');
+
+
+
+------- USE OF LIKE CLAUSE-------
+
+
+
+
+CREATE DATABASE likeclause_db;
+
+USE likeclause_db;
+
+CREATE TABLE worker (
+worker_id INT PRIMARY KEY,
+first_name VARCHAR(50),
+last_name VARCHAR(50),
+department VARCHAR(50),
+salary INT
+);
+
+INSERT INTO worker (worker_id, first_name, last_name, department, salary) VALUES
+(1, 'Aman', 'Sharma', 'Admin', 50000),
+(2, 'John', 'Doe', 'HR', 60000),
+(3, 'Rohan', 'Patel', 'IT', 75000),
+(4, 'Jony', 'Singh', 'Finance', 80000),
+(5, 'Mihira', 'Kapoor', 'Marketing', 70000),
+(6, 'Mamta', 'Joshi', 'HR', 65000),
+(7, 'Kiran', 'Verma', 'Admin', 55000),
+(8, 'Sonia', 'Mehta', 'IT', 72000),
+(9, 'Ram', 'Kumar', 'Finance', 50000),
+(10, 'Anam', 'Rao', 'Marketing', 68000);
+
+SELECT * FROM worker;
+
+SELECT first_name, department, salary FROM worker WHERE first_name LIKE 'A%';
+SELECT first_name, department, salary FROM worker WHERE first_name LIKE '%n';
+SELECT first_name, department, salary FROM worker WHERE first_name LIKE '%am%';
+SELECT first_name, department, salary FROM worker WHERE first_name LIKE 'J%y';
+SELECT first_name, department, salary FROM worker WHERE first_name LIKE 'M_____';
+SELECT first_name, department, salary FROM worker WHERE first_name LIKE '_o%';
+SELECT * FROM worker WHERE first_name LIKE '_i__a_';
+
+
+
+
+
+----- query to find the employee with least salary in a department who dont has an A in the name --------
+
+
+
+select * from worker 
+where department = 'Admin'
+and first_name not like 'a%'
+and salary = (select MIN(salary) from worker where department = 'Admin');
+
+
+
+
+
+------- USE OF UNION AND CASE CLAUSE---------
+
+
+
+CREATE DATABASE companydata;
+USE companydata;
+CREATE TABLE employee (
+employee_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+first_name CHAR(25),
+last_name CHAR(25),
+salary INT,
+joining_date DATETIME,
+department CHAR(25)
+);
+INSERT INTO employee (employee_id, first_name, last_name, salary, joining_date, department) VALUES
+(101,'Rakesh','Mehra',120000,'2021-03-15 10:00:00','Sales'),
+(102,'Simran','Kapoor',85000,'2022-07-21 09:30:00','IT'),
+(103,'Arjun','Malhotra',320000,'2020-01-10 11:15:00','Management'),
+(104,'Neha','Bansal',450000,'2019-05-18 08:45:00','Finance'),
+(105,'Kunal','Verma',275000,'2021-09-12 10:20:00','Sales'),
+(106,'Piyush','Sharma',180000,'2022-11-05 09:10:00','Support'),
+(107,'Ritika','Joshi',70000,'2023-02-25 12:00:00','Support'),
+(108,'Diya','Agarwal',95000,'2021-06-30 08:30:00','IT');
+SELECT * FROM employee;
+SELECT * FROM employee WHERE first_name LIKE '_i__a_';
+SELECT * FROM employee;
+SELECT salary FROM employee WHERE department='Sales';
+SELECT salary FROM employee UNION ALL SELECT salary FROM employee;
+SELECT * FROM employee;
+SELECT employee_id AS EmployeeCode FROM employee;
+SELECT DISTINCT(department) FROM employee;
+SELECT employee_id,first_name,
+CASE
+WHEN salary>300000 THEN 'High Income'
+WHEN salary>=100000 AND salary<300000 THEN 'Average Income'
+ELSE 'Low Income'
+END AS EmployeeStatus
+FROM employee;
+
+
+
+
+
+-------USE OF UNION , CASE , MAX , MIN , VIEW------------
+
+
+
+
+
+CREATE DATABASE staffrecords;
+USE staffrecords;
+CREATE TABLE staff (
+staff_id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+first_name CHAR(25),
+last_name CHAR(25),
+salary INT,
+joining_date DATETIME,
+department CHAR(25)
+);
+INSERT INTO staff (staff_id,first_name,last_name,salary,joining_date,department) VALUES
+(201,'Rohan','Shukla',110000,'2021-01-15 09:00:00','Sales'),
+(202,'Priya','Mishra',85000,'2022-03-10 10:15:00','HR'),
+(203,'Karan','Malik',310000,'2020-07-25 11:30:00','Management'),
+(204,'Sneha','Kapoor',550000,'2019-11-18 08:45:00','Finance'),
+(205,'Vikas','Arora',470000,'2021-06-12 09:20:00','Finance'),
+(206,'Nitin','Verma',220000,'2022-09-05 10:00:00','Support'),
+(207,'Ritika','Joshi',78000,'2023-02-28 12:10:00','Support'),
+(208,'Diwakar','Saxena',95000,'2021-04-30 08:35:00','HR');
+SELECT * FROM staff;
+SELECT * FROM staff WHERE first_name LIKE '_i__a_';
+SELECT * FROM staff;
+SELECT salary FROM staff WHERE department='Finance';
+SELECT salary FROM staff UNION ALL SELECT salary FROM staff;
+SELECT * FROM staff;
+SELECT staff_id AS EmployeeNumber FROM staff;
+SELECT DISTINCT(department) FROM staff;
+SELECT staff_id,first_name,
+CASE
+WHEN salary>300000 THEN 'Executive'
+WHEN salary>=100000 AND salary<300000 THEN 'Standard'
+ELSE 'Basic'
+END AS EmployeeGrade
+FROM staff;
+SELECT MIN(salary) FROM staff WHERE department='Finance';
+SELECT MAX(salary) FROM staff WHERE department='Finance';
+CREATE VIEW minFinanceSalary AS SELECT MIN(salary) FROM staff WHERE department='Finance';
+CREATE VIEW maxFinanceSalary AS SELECT MAX(salary) FROM staff WHERE department='Finance';
+SELECT * FROM maxFinanceSalary;
