@@ -1,0 +1,148 @@
+---------DROP CONSTRAINT--------
+
+
+
+use vitcampus;
+CREATE TABLE Persons (
+    ID int NOT NULL,
+    LastName varchar(255) unique not null,
+    FirstName varchar(255) NOT NULL,
+    Age int
+);
+desc persons;
+
+insert into persons values (101,'V','Jayanth',null);
+select * from persons;
+
+ALTER TABLE Persons
+ADD UNIQUE (AGE);
+
+ALTER TABLE Persons
+DROP CONSTRAINT Age;
+
+
+
+
+--------CHECK CONSTRAINT---------
+
+
+
+
+
+CREATE TABLE People(
+    ID int NOT NULL,
+    LastName varchar(255) NOT NULL,
+    FirstName varchar(255),
+    Age int,
+    CHECK (Age>=18)
+);
+
+ALTER TABLE Persons	
+ADD CHECK (Age>=18);
+
+
+
+
+-------DROP CONSTRAINT , ALTER , PRIAMRY , FOREIGN KEY-----------
+
+
+
+
+USE vitcampus;
+
+-- Create table students
+CREATE TABLE students (
+    StudentID INT NOT NULL,
+    LastName VARCHAR(255) UNIQUE NOT NULL,
+    FirstName VARCHAR(255) NOT NULL,
+    Age INT
+);
+
+DESC students;
+
+-- Insert into students
+INSERT INTO students VALUES (201,'Sharma','Rahul',20);
+
+SELECT * FROM students;
+
+-- Add unique constraint on Age
+ALTER TABLE students
+ADD UNIQUE (Age);
+
+-- Drop unique constraint on Age
+ALTER TABLE students
+DROP INDEX Age;
+
+-- Drop table students
+DROP TABLE students;
+
+-- Create table trainees with CHECK constraint
+CREATE TABLE trainees (
+    Age INT NOT NULL,
+    CHECK (Age >= 18 AND Age <= 25)
+);
+
+INSERT INTO trainees VALUES (22);
+
+-- Create table employee_info
+CREATE TABLE employee_info (
+    EmpID INT NOT NULL,
+    LastName VARCHAR(255) NOT NULL,
+    FirstName VARCHAR(255),
+    Age INT,
+    City VARCHAR(255) DEFAULT 'Bangalore'
+);
+
+DESC employee_info;
+
+-- Create inventory table
+CREATE TABLE inventory (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    RefNo INT NOT NULL UNIQUE
+);
+
+DESC inventory;
+
+INSERT INTO inventory VALUES (301,'Office Chair',45001);
+
+SELECT * FROM inventory;
+
+-- Drop inventory table before recreating
+DROP TABLE inventory;
+
+-- Create department table
+CREATE TABLE department (
+    DeptID INT PRIMARY KEY,
+    DeptName VARCHAR(100) NOT NULL
+);
+
+INSERT INTO department 
+VALUES 
+(1,'Electronics'),
+(2,'Furniture');
+
+SELECT * FROM department;
+
+-- Create inventory table with foreign key
+CREATE TABLE inventory (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(100) NOT NULL,
+    DeptID INT,
+    FOREIGN KEY (DeptID) REFERENCES department(DeptID)
+);
+
+DESC inventory;
+
+-- Insert valid records into inventory
+INSERT INTO inventory VALUES (501,'Wireless Mouse',1);
+
+SELECT * FROM inventory;
+
+-- Delete example
+DELETE FROM department WHERE DeptID = 2;
+
+-- Example update statement
+UPDATE inventory
+SET ProductName = 'Bluetooth Mouse'
+WHERE ProductID = 501;			
