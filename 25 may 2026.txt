@@ -1,0 +1,37 @@
+show dbs
+
+use studentDB
+
+show collections
+
+db.createCollection("students")
+
+db.students.insert({
+    name: "Rahul",
+    age: 20,
+    course: "BCA"
+})
+
+db.students.insert({
+    name: "Aman",
+    age: 21,
+    course: "BSc"
+})
+
+db.students.insert({
+    name: "Priya",
+    age: 22,
+    course: "BCom"
+})
+
+db.students.insert({
+    name: "Neha",
+    age: 19,
+    course: "BA"
+})
+
+db.students.find()
+
+db.students.drop()
+
+db.dropDatabase()
