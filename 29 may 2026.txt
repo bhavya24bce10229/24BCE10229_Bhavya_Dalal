@@ -1,0 +1,974 @@
+---------------sort()-----------------
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate" : ISODate("2011-05-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 }, "color" : [ "white", "black" ], "storage" : [ 64, 128, 256 ] },
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate" : ISODate("2011-09-01T00:00:00Z"), "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 }, "color" : [ "white", "black", "purple" ], "storage" : [ 128, 256, 512 ] },
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate" : ISODate("2015-01-14T00:00:00Z"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 }, "color" : [ "blue" ], "storage" : [ 16, 64, 128 ] },
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate" : ISODate("2020-05-14T00:00:00Z"), "spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 }, "color" : [ "white", "orange", "gold", "gray" ], "storage" : [ 128, 256, 1024 ] },
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599, "releaseDate" : ISODate("2022-09-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 }, "color" : [ "white", "orange", "gold", "gray" ], "storage" : [ 128, 256 ] },
+    { "_id" : 6, "name" : "xWidget", "spec" : { "ram" : 64, "screen" : 9.7, "cpu" : 3.66 }, "color" : [ "black" ], "storage" : [ 1024 ] },
+    { "_id" : 7, "name" : "xReader", "price" : null, "spec" : { "ram" : 64, "screen" : 6.7, "cpu" : 3.66 }, "color" : [ "black", "white" ], "storage" : [ 128 ] }
+])
+
+
+
+1) Sorting document by one field examples
+
+
+db.products.find({
+    'price': {
+        $exists: 1
+    }
+}, {
+    name: 1,
+    price: 1
+})
+Code language: PHP (php)
+Output:
+[
+  { _id: 1, name: 'xPhone', price: 799 },
+  { _id: 2, name: 'xTablet', price: 899 },
+  { _id: 3, name: 'SmartTablet', price: 899 },
+  { _id: 4, name: 'SmartPad', price: 699 },
+  { _id: 5, name: 'SmartPhone', price: 599 },
+  { _id: 7, name: 'xReader', price: null }
+]
+
+
+---------------------------------
+
+To sort the products by prices in ascending order, you use the sort() method like this:
+
+
+db.products.find({
+    'price': {
+        $exists: 1
+    }
+}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: 1
+})
+
+
+Output:
+[
+  { _id: 7, name: 'xReader', price: null },
+  { _id: 5, name: 'SmartPhone', price: 599 },
+  { _id: 4, name: 'SmartPad', price: 699 },
+  { _id: 1, name: 'xPhone', price: 799 },
+  { _id: 2, name: 'xTablet', price: 899 },
+  { _id: 3, name: 'SmartTablet', price: 899 }
+]
+
+----------------------------
+
+To sort the documents in descending order, you change the value of the price field to -1 as shown in the following query:
+
+
+db.products.find({
+    'price': {
+        $exists: 1
+    }
+}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: -1
+})
+
+
+Output:
+[
+  { _id: 2, name: 'xTablet', price: 899 },
+  { _id: 3, name: 'SmartTablet', price: 899 },
+  { _id: 1, name: 'xPhone', price: 799 },
+  { _id: 4, name: 'SmartPad', price: 699 },
+  { _id: 5, name: 'SmartPhone', price: 599 },
+  { _id: 7, name: 'xReader', price: null }
+]
+
+
+
+2) Sorting document by two or more fields example
+
+
+
+db.products.find({
+    'price': {
+        $exists: 1
+    }
+}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: 1,
+    name: 1
+});
+
+
+Output:
+[
+  { _id: 7, name: 'xReader', price: null },
+  { _id: 5, name: 'SmartPhone', price: 599 },
+  { _id: 4, name: 'SmartPad', price: 699 },
+  { _id: 1, name: 'xPhone', price: 799 },
+  { _id: 3, name: 'SmartTablet', price: 899 },
+  { _id: 2, name: 'xTablet', price: 899 }
+]
+
+
+-----------------------
+
+
+The following example sorts the products by prices in ascending order and sorts the sorted products by names in descending order:
+db.products.find({
+    'price': {
+        $exists: 1
+    }
+}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: 1,
+    name: -1
+})
+Output:
+[
+  { _id: 7, name: 'xReader', price: null },
+  { _id: 5, name: 'SmartPhone', price: 599 },
+  { _id: 4, name: 'SmartPad', price: 699 },
+  { _id: 1, name: 'xPhone', price: 799 },
+  { _id: 2, name: 'xTablet', price: 899 },
+  { _id: 3, name: 'SmartTablet', price: 899 }
+]
+
+
+
+
+------------------------------
+
+
+
+3) Sorting documetns by dates
+
+
+db.products.find({
+    releaseDate: {
+        $exists: 1
+    }
+
+}, {
+    name: 1,
+    releaseDate: 1
+}).sort({
+    releaseDate: 1
+});
+Code language: CSS (css)
+Output:
+[
+  {
+    _id: 1,
+    name: 'xPhone',
+    releaseDate: ISODate("2011-05-14T00:00:00.000Z")
+  },
+  {
+    _id: 2,
+    name: 'xTablet',
+    releaseDate: ISODate("2011-09-01T00:00:00.000Z")
+  },
+  {
+    _id: 3,
+    name: 'SmartTablet',
+    releaseDate: ISODate("2015-01-14T00:00:00.000Z")
+  },
+  {
+    _id: 4,
+    name: 'SmartPad',
+    releaseDate: ISODate("2020-05-14T00:00:00.000Z")
+  },
+  {
+    _id: 5,
+    name: 'SmartPhone',
+    releaseDate: ISODate("2022-09-14T00:00:00.000Z")
+  }
+]
+
+
+
+
+The following query sorts the products by the values in the releaseDate field in descending order:
+
+
+
+db.products.find({
+    releaseDate: {
+        $exists: 1
+    }
+
+}, {
+    name: 1,
+    releaseDate: 1
+}).sort({
+    releaseDate: -1
+});
+Code language: CSS (css)
+Output:
+[
+  {
+    _id: 5,
+    name: 'SmartPhone',
+    releaseDate: ISODate("2022-09-14T00:00:00.000Z")
+  },
+  {
+    _id: 4,
+    name: 'SmartPad',
+    releaseDate: ISODate("2020-05-14T00:00:00.000Z")
+  },
+  {
+    _id: 3,
+    name: 'SmartTablet',
+    releaseDate: ISODate("2015-01-14T00:00:00.000Z")
+  },
+  {
+    _id: 2,
+    name: 'xTablet',
+    releaseDate: ISODate("2011-09-01T00:00:00.000Z")
+  },
+  {
+    _id: 1,
+    name: 'xPhone',
+    releaseDate: ISODate("2011-05-14T00:00:00.000Z")
+  }
+]
+
+
+
+4) Sorting documents by fields in embedded documents
+
+
+
+
+db.products.find({}, {
+    name: 1,
+    spec: 1
+}).sort({
+    "spec.ram": 1
+});
+Code language: JavaScript (javascript)
+Output:
+[
+  { _id: 1, name: 'xPhone', spec: { ram: 4, screen: 6.5, cpu: 2.66 } },
+  {
+    _id: 5,
+    name: 'SmartPhone',
+    spec: { ram: 4, screen: 9.7, cpu: 1.66 }
+  },
+  {
+    _id: 4,
+    name: 'SmartPad',
+    spec: { ram: 8, screen: 9.7, cpu: 1.66 }
+  },
+  {
+    _id: 3,
+    name: 'SmartTablet',
+    spec: { ram: 12, screen: 9.7, cpu: 3.66 }
+  },
+  {
+    _id: 2,
+    name: 'xTablet',
+    spec: { ram: 16, screen: 9.5, cpu: 3.66 }
+  },
+  {
+    _id: 6,
+    name: 'xWidget',
+    spec: { ram: 64, screen: 9.7, cpu: 3.66 }
+  },
+  {
+    _id: 7,
+    name: 'xReader',
+    spec: { ram: 64, screen: 6.7, cpu: 3.66 }
+  }
+]
+
+
+
+
+------------------
+
+
+
+
+MongoDB limit() examples
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate" : ISODate("2011-05-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 }, "color" : [ "white", "black" ], "storage" : [ 64, 128, 256 ] },
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate" : ISODate("2011-09-01T00:00:00Z"), "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 }, "color" : [ "white", "black", "purple" ], "storage" : [ 128, 256, 512 ] },
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate" : ISODate("2015-01-14T00:00:00Z"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 }, "color" : [ "blue" ], "storage" : [ 16, 64, 128 ] },
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate" : ISODate("2020-05-14T00:00:00Z"), "spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 }, "color" : [ "white", "orange", "gold", "gray" ], "storage" : [ 128, 256, 1024 ] },
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599, "releaseDate" : ISODate("2022-09-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 }, "color" : [ "white", "orange", "gold", "gray" ], "storage" : [ 128, 256 ] },
+    { "_id" : 6, "name" : "xWidget", "spec" : { "ram" : 64, "screen" : 9.7, "cpu" : 3.66 }, "color" : [ "black" ], "storage" : [ 1024 ] },
+    { "_id" : 7, "name" : "xReader", "price" : null, "spec" : { "ram" : 64, "screen" : 6.7, "cpu" : 3.66 }, "color" : [ "black", "white" ], "storage" : [ 128 ] }
+])
+
+
+
+1) Using MongoDB limit() to get the most expensive product
+
+
+
+db.products.find({}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: -1
+}).limit(1);
+
+
+
+Output:
+[ { _id: 2, name: 'xTablet', price: 899 } ]
+
+
+
+In this example, we sort the products by prices in descending order and use limit() to select the first one.
+
+
+
+
+db.products.find({}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: -1,
+    name: 1
+}).limit(1);
+Code language: CSS (css)
+Output:
+[ { _id: 3, name: 'SmartTablet', price: 899 } ]
+
+
+
+
+2) Using MongoDB limit() and skip() to get the paginated result
+
+
+
+
+db.products.find({}, {
+    name: 1,
+    price: 1
+}).sort({
+    price: -1,
+    name: 1
+}).skip(2).limit(2);
+Code language: CSS (css)
+Output:
+[
+  { _id: 1, name: 'xPhone', price: 799 },
+  { _id: 4, name: 'SmartPad', price: 699 }
+]
+
+
+
+
+
+
+
+------------------------------
+
+
+---------------------updateOne()-----------
+
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+
+
+
+
+1) Using the MongoDB updateOne() method to update a single document
+
+
+
+db.products.updateOne({
+    _id: 1
+}, {
+    $set: {
+        price: 899
+    }
+})
+
+
+In this query:
+The { _id : 1 } is the filter argument that matches the documents to update. In this example, it matches the document whose _id is 1.
+The { $set: { price: 899 } } specifies the change to apply. It uses the $set operator to set the value of the price field to 899.
+The query returns the following result:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+
+
+
+
+db.products.findOne({ _id: 1 }, { name: 1, price: 1 })
+Code language: CSS (css)
+It returned the following document:
+{ _id: 1, name: 'xPhone', price: 899 }
+
+
+
+2) Using the MongoDB updateOne() method to update the first matching document
+
+
+
+db.products.find({ price: 899 }, { name: 1, price: 1 })
+It returned the following documents:
+[
+  { _id: 1, name: 'xPhone', price: 899 },
+  { _id: 2, name: 'xTablet', price: 899 },
+  { _id: 3, name: 'SmartTablet', price: 899 }
+]
+
+
+
+db.products.updateOne({ price: 899 }, { $set: { price: null } })
+It updated one document as shown in the following result:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+
+db.products.find({ _id: 1}, { name: 1, price: 1 })
+
+
+Output:
+[ { _id: 1, name: 'xPhone', price: null } ]
+
+
+3) Using the updateOne() method to update embedded documents
+
+
+
+db.products.find({ _id: 4 }, { name: 1, spec: 1 })
+It returned the following document:
+[
+  {
+    _id: 4,
+    name: 'SmartPad',
+    spec: { ram: 8, screen: 9.7, cpu: 1.66 }
+  }
+]
+
+
+db.products.updateOne({
+    _id: 4
+}, {
+    $set: {
+        "spec.ram": 16,
+        "spec.screen": 10.7,
+        "spec.cpu": 2.66
+    }
+})
+
+
+It returned the following document:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+If you query the document with _id 4 again, you’ll see the change:
+db.products.find({ _id: 4 }, { name: 1, spec: 1 })
+
+
+Output:
+[
+  {
+    _id: 4,
+    name: 'SmartPad',
+    spec: { ram: 16, screen: 10.7, cpu: 2.66 }
+  }
+]
+
+
+4) Using the MongoDB updateOne() method to update array elements
+The following example uses the updateOne() method to update the first and second elements of the storage array in the document with _id 4:
+db.products.updateOne(
+ { _id: 4}, 
+ {
+    $set: {
+        "storage.0": 16,
+        "storage.1": 32
+    }
+ }
+)
+
+
+Output:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+If you query the document with _id 4 from the products collection, you’ll see that the first and second elements of the storage array have been updated:
+db.products.find({ _id: 4 }, { name: 1, storage: 1 });
+
+Output:
+[ { _id: 4, name: 'SmartPad', storage: [ 16, 32, 1024 ] } ]
+
+
+
+----------------------------
+
+
+
+
+---------------updateMany() -----------------
+
+
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+
+
+1) Using the MongoDB updateMany() method to update multiple documents
+
+
+
+
+db.products.updateMany(
+    {  price: 899}, 
+    { $set: {  price: 895 }}
+)
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+
+
+
+To check the update, you can use the find() method to select the documents where the value of the price field is 895 as follows:
+db.products.find({
+    price: 895
+}, {
+    name: 1,
+    price: 1
+})
+
+
+
+The query returned the following documents:
+[
+  { _id: 2, name: 'xTablet', price: 895 },
+  { _id: 3, name: 'SmartTablet', price: 895 }
+]
+
+
+
+
+2) Using the updateMany() method to update embedded documents
+
+
+
+db.products.find({
+    price: { $gt: 700}
+}, {
+    name: 1,
+    price: 1,
+    spec: 1
+})
+Code language: CSS (css)
+The query returned the following documents:
+[
+  {
+    _id: 1,
+    name: 'xPhone',
+    price: 799,
+    spec: { ram: 4, screen: 6.5, cpu: 2.66 }
+  },
+  {
+    _id: 2,
+    name: 'xTablet',
+    price: 895,
+    spec: { ram: 16, screen: 9.5, cpu: 3.66 }
+  },
+  {
+    _id: 3,
+    name: 'SmartTablet',
+    price: 895,
+    spec: { ram: 12, screen: 9.7, cpu: 3.66 }
+  }
+]
+
+
+
+
+------------------------------------
+
+
+db.products.updateMany({
+    price: { $gt: 700}
+}, {
+    $set: {
+        "spec.ram": 32,
+        "spec.screen": 9.8,
+        "spec.cpu": 5.66
+    }
+})
+
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+3) Using the MongoDB updateMany() method to update array elements
+
+
+
+db.products.updateMany({
+    _id: {
+        $in: [1, 2, 3]
+    }
+}, {
+    $set: {
+        "storage.0": 16,
+        "storage.1": 32
+    }
+})
+
+
+
+Output:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 3,
+  modifiedCount: 3,
+  upsertedCount: 0
+}
+
+
+
+
+
+db.products.find(
+   { _id: { $in: [1,2,3]}}, 
+   { name: 1, storage: 1}
+)
+
+
+Output:
+[
+  { _id: 1, name: 'xPhone', storage: [ 16, 32, 256 ] },
+  { _id: 2, name: 'xTablet', storage: [ 16, 32, 512 ] },
+  { _id: 3, name: 'SmartTablet', storage: [ 16, 32, 128 ] }
+]
+
+
+
+
+-------------------------------------------------
+
+---------$inc---------------------
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+
+
+
+1) Using the MongoDB $inc operator to increase the value of a field
+
+
+
+db.products.updateOne({
+    _id: 1
+}, {
+    $inc: {
+        price: 50
+    }
+})
+
+
+
+
+It returned the following document indicating that one document matched and has been updated:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+
+If you query the document _id 1, you’ll see that the price has been increased:
+db.products.find(
+    {_id: 1},
+    {name: 1, price: 1}
+)
+Code language: CSS (css)
+Output:
+[ { _id: 1, name: 'xPhone', price: 849 } ]
+
+
+
+2) Using the MongoDB $inc operator to decrease the value of a field
+
+
+db.products.updateOne({
+    _id: 1
+}, {
+    $inc: {
+        price: -150
+    }
+})
+
+
+Output:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+
+The price of the document _id 1 has been decreased as shown in the output of the following query:
+
+
+db.products.find(
+    { _id: 1 },
+    { name: 1, price: 1 }
+)
+
+
+Output:
+[ { _id: 1, name: 'xPhone', price: 699 } ]
+
+
+
+3) Using MongoDB $inc operator to update values of multiple fields
+
+
+db.products.updateOne({
+    _id: 1
+}, {
+    $inc: {
+        price: 50,
+        "spec.ram": 4
+    }
+})
+
+
+
+Output:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+db.products.find(
+    {_id: 1},
+    {name: 1, price: 1, "spec.ram": 1}
+)
+
+
+The values of the price and ram fields have been increased as shown in the following output:
+[ { _id: 1, name: 'xPhone', price: 749, spec: { ram: 8 } } ]
+
+
+
+-------------------------------
+
+
+----------------$min -------------
+
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+
+
+
+The following example uses the $min operator to update the price of the document _id 5:
+db.products.updateOne({
+    _id: 5
+}, {
+    $min: {
+        price: 699
+    }
+})
+
+
+
+The query found a matching document. However, it didn’t update any:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+
+
+
+The following example uses the $min operator to update the price of the document _id 5:
+db.products.updateOne({
+    _id: 5
+}, {
+    $min: {
+        price: 499
+    }
+})
+
+In this case, the price field of the document _id 5 is updated to 499:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+This query verifies the update:
+
+
+
+
+db.products.find({ _id: 5 }, { name: 1, price: 1 })
+Output:
+[ { _id: 5, name: 'SmartPhone', price: 499 } ]
+
+
+--------$max operator example---------
+
+
+
+db.products.insertMany([
+    { "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate": ISODate("2011-05-14"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 },"color":["white","black"],"storage":[64,128,256]},
+    { "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate": ISODate("2011-09-01") , "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 },"color":["white","black","purple"],"storage":[128,256,512]},
+    { "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate": ISODate("2015-01-14"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 },"color":["blue"],"storage":[16,64,128]},
+    { "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate": ISODate("2020-05-14"),"spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256,1024]},
+    { "_id" : 5, "name" : "SmartPhone", "price" : 599,"releaseDate": ISODate("2022-09-14"), "spec" : { "ram" : 4, "screen" : 5.7, "cpu" : 1.66 },"color":["white","orange","gold","gray"],"storage":[128,256]}
+ ])
+
+
+
+The following example uses the $max operator to update the price of the document _id 1:
+db.products.updateOne({
+    _id: 1
+}, {
+    $max: {
+        price: 699
+    }
+})
+The query found one matching document but it didn’t update any document as shown in the modifiedCount value:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 0,
+  upsertedCount: 0
+}
+
+
+The following example uses the $min operator to update the price of the document _id 1 to 899:
+db.products.updateOne({
+    _id: 1
+}, {
+    $max: {
+        price: 899
+    }
+})
+
+
+In this case, the price field of the document _id 1 is updated to 899:
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+
+
+
+
+This query verifies the update:
+db.products.find({ _id: 1 }, { name: 1, price: 1 })
+
+
+
+Output:
+[ { _id: 1, name: 'xPhone', price: 899 } ]
+
+
+
+
+
+
+
